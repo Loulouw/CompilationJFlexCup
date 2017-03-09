@@ -1,0 +1,15 @@
+/*
+ * Test de controle semantique
+ */
+ 
+ int i;
+ 
+ func nothing f int a int b{
+	int x;
+	x=0;
+ }
+ 
+ func nothing start{
+	f(i); /* erreur : nombre de parametres */
+ }
+ 

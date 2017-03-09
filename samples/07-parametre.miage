@@ -1,0 +1,14 @@
+/*une fonction (appel)*/
+
+
+int i =0;
+int j = 0;
+
+func int f int a int b{
+	int x, y, z;
+	return 0;
+ }
+
+func nothing start{
+	i = f(i,j); /*tester ceci*/
+}

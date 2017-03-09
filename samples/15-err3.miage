@@ -1,0 +1,8 @@
+/*
+ * Test de controle semantique
+ */
+ 
+ func nothing start{
+	i = 0; /* erreur : variable non definie */
+ }
+ 

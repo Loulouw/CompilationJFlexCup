@@ -1,0 +1,11 @@
+/*
+ * Test de controle semantique
+ */
+ 
+ int i;
+ int i; /* erreur : double definition */
+ 
+ func nothing start{
+	i = 0;
+ }
+ 

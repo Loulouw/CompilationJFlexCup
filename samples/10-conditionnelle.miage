@@ -1,0 +1,14 @@
+/*
+ * conditionnelle
+ */
+
+int i = 3; int j;
+
+func nothing start{
+	si ( i < 2 ){
+		j=0;
+	}sinon{
+		j=1;
+	}
+ }
+

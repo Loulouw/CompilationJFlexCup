@@ -1,0 +1,15 @@
+/*
+ * recursivité
+ */
+int x ;
+
+func int f int n{
+	si (n>0){
+		return 0;
+	}
+	return (n+f(n-1));
+}
+
+func nothing start{
+	x = f(5);
+}

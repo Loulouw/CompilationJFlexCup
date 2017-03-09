@@ -1,0 +1,9 @@
+/*Test d'une expression arithmétique*/
+ 
+int i, j;
+
+func nothing start{
+	i=0;
+	j = (2+i) - (3+i);
+}
+ 
