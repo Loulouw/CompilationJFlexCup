@@ -3,12 +3,11 @@
  */
 package fr.ul.miage.exemple;
 
-import java.io.BufferedReader; 
-import java.io.InputStreamReader;
+import java.io.File;
+import java.io.FileReader;
 
 import fr.ul.miage.exemple.generated.ParserCup;
 import fr.ul.miage.exemple.generated.Yylex;
-
 
 
 /**
@@ -21,11 +20,12 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		ParserCup parser = new ParserCup(new Yylex(new BufferedReader(new InputStreamReader(System.in))));
+		File directory = new File("samples");
+		File[] listFiles = directory.listFiles();
 		try {
+			ParserCup parser = new ParserCup(new Yylex(new FileReader(listFiles[2])));
 			parser.parse();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

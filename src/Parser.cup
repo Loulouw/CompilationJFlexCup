@@ -9,24 +9,32 @@
 package fr.ul.miage.exemple.generated;
 
 /* la grammaire */
+terminal CRO_OUVR, CRO_FERM, EGAL, RETOUR, ESPACE, PV, VIRG;
+terminal COMMENTAIRE;
+terminal FUNC, NOM, NOMBRE;
+terminal INT, NOTHING;
 
-terminal ADD, MUL, PO, PF, NUM;
-
-non terminal  l, x, f, a;
-
+non terminal l, ligne, function, actions, content_function;
+non terminal type, declaration_var,declaration_var_mul_nom, declaration_var_mul;
+non terminal affectation;
 start with l;
 
-l ::= x
-    ;
-      
-x ::= x ADD f
-    | f 
-    ;
-              
-f ::= f MUL a 
-    | a
-    ;
-              
-a ::= NUM
-    | PO x PF
-    ;
+l				::= actions;
+
+actions			::= actions ligne | /*vide*/;
+
+ligne			::= function | COMMENTAIRE | declaration_var | declaration_var_mul | RETOUR | ESPACE ;
+
+function		::= FUNC ESPACE type ESPACE NOM CRO_OUVR content_function CRO_FERM;
+
+content_function	::= RETOUR | affectation | /* vide */ ;
+
+affectation		::= NOM EGAL NOM PV | NOM EGAL NOMBRE PV;
+
+declaration_var	::= type ESPACE NOM EGAL NOMBRE PV;
+
+declaration_var_mul ::= type ESPACE NOM declaration_var_mul_nom PV;
+
+declaration_var_mul_nom ::= declaration_var_mul_nom VIRG NOM  | /*vide*/ ;
+
+type			::= INT | NOTHING;

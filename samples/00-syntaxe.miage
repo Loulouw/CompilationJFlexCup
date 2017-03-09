@@ -7,7 +7,7 @@ int i=0;
 /* un int est par defaut 0*/
 int j;
  
-func int f(int a,int b){
+func int f int a int b{
 	int x;
 	
 	x=(a*2)+b-5/3;
