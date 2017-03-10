@@ -6,7 +6,9 @@ int i=0;
 
 /* un int est par defaut 0*/
 int j;
- 
+
+/* int f correspond a la fonction f qui
+retourne un int */
 func int f int a int b{
 	int x;
 	
@@ -15,7 +17,7 @@ func int f int a int b{
 	return x+2;
 }
 
-func nothing start(){
-	j = Sys.lire();
-	Sys.ecrire(f(i+1,j);
+func nothing start{
+	j = lire();
+	ecrire(f(i+1,j));
 }

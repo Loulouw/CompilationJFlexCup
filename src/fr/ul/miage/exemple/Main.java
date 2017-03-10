@@ -23,8 +23,11 @@ public class Main {
 		File directory = new File("samples");
 		File[] listFiles = directory.listFiles();
 		try {
-			ParserCup parser = new ParserCup(new Yylex(new FileReader(listFiles[2])));
-			parser.parse();
+			//for(int i=1;i<=7;i++){
+				ParserCup parser = new ParserCup(new Yylex(new FileReader(listFiles[0])));
+				parser.parse();
+			//}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

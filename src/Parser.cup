@@ -9,32 +9,152 @@
 package fr.ul.miage.exemple.generated;
 
 /* la grammaire */
-terminal CRO_OUVR, CRO_FERM, EGAL, RETOUR, ESPACE, PV, VIRG;
+terminal CRO_OUVR, CRO_FERM, RETOUR, ESPACE, PV, VIRG;
 terminal COMMENTAIRE;
-terminal FUNC, NOM, NOMBRE;
+terminal FUNC, NOM, NOMBRE, RETURN;
 terminal INT, NOTHING;
+terminal PLUS,MOINS,FOIS,DIV,PO,PF,EGAL,INF,SUP,DIFF;
+terminal SI,SINON,TQ;
+terminal LIRE,ECRIRE;
 
-non terminal l, ligne, function, actions, content_function;
-non terminal type, declaration_var,declaration_var_mul_nom, declaration_var_mul;
-non terminal affectation;
+
+non terminal l, ligne, fonction, actions, content_function, content_function_list;
+non terminal type, declaration_var,declaration_var_mul_nom, declaration_var_mul, declaration_var_mul_value, declaration_value;
+non terminal affectation, calcul;
+non terminal return, appel_fonction, param_appel_fonction, param_appel_fonction_rec;
+non terminal param_fonction, param_fonction_rec;
+non terminal c2,c3,c4,c5;
+non terminal si,sinon,tq, condition, s2,s3,s4,s5;
+non terminal ecrire;
+
+//Precedences added by Eclipse plugin
+precedence nonassoc PO;	// Inserted by Eclipse plugin
+
 start with l;
 
 l				::= actions;
 
 actions			::= actions ligne | /*vide*/;
 
-ligne			::= function | COMMENTAIRE | declaration_var | declaration_var_mul | RETOUR | ESPACE ;
+ligne			::= fonction | COMMENTAIRE | declaration_var | declaration_var_mul | RETOUR | ESPACE ;
 
-function		::= FUNC ESPACE type ESPACE NOM CRO_OUVR content_function CRO_FERM;
+type			::= INT | NOTHING;
 
-content_function	::= RETOUR | affectation | /* vide */ ;
+/***********************************************/
+/***************FONCTION************************/
+/***********************************************/
+fonction		::= FUNC ESPACE type ESPACE NOM param_fonction_rec CRO_OUVR content_function CRO_FERM;
 
-affectation		::= NOM EGAL NOM PV | NOM EGAL NOMBRE PV;
+param_fonction_rec ::= param_fonction_rec param_fonction | /*vide*/ ;
 
-declaration_var	::= type ESPACE NOM EGAL NOMBRE PV;
+param_fonction ::= ESPACE type ESPACE NOM VIRG | ESPACE type ESPACE NOM;
+
+
+content_function	::= content_function content_function_list | /*vide*/ ;
+
+content_function_list ::= RETOUR | COMMENTAIRE | si | tq | ecrire | return | appel_fonction PV | affectation | declaration_var | declaration_var_mul;
+
+return 			::= RETURN ESPACE calcul PV ;
+
+/***********************************************/
+/***************FIN FONCTION********************/
+/***********************************************/
+
+
+
+
+
+
+/***********************************************/
+/***************CONDITION/BOUCLE****************/
+/***********************************************/
+si ::= SI PO condition PF CRO_OUVR content_function CRO_FERM sinon;
+
+sinon ::= SINON CRO_OUVR content_function CRO_FERM | /* vide */;
+
+tq ::= TQ PO condition PF CRO_OUVR content_function CRO_FERM;
+
+condition ::= condition INF s2 | s2;
+
+s2 ::= s2 SUP s3 | s3;
+
+s3 ::= s3 DIFF s4 | s4;
+
+s4 ::= s4 EGAL s5 | s5;
+
+s5 ::= calcul;
+
+/***********************************************/
+/***************FIN CONDITION/BOUCLE************/
+/***********************************************/
+
+
+
+
+
+
+
+/***********************************************/
+/***************CALCUL**************************/
+/***********************************************/
+calcul ::= calcul PLUS c2 | c2;
+
+c2 ::= c2 MOINS c3 | c3;
+
+c3 ::= c3 FOIS c4 | c4;
+
+c4 ::= c4 DIV c5 | c5;
+
+c5 ::= appel_fonction | NOMBRE | PO calcul PF | NOM;
+
+
+/***********************************************/
+/***********FIN CALCUL**************************/
+/***********************************************/
+
+
+
+
+
+
+/***********************************************/
+/***************VARIABLE************************/
+/***********************************************/
+affectation		::= NOM EGAL declaration_value PV;
+
+declaration_var	::= type ESPACE NOM EGAL declaration_value PV;
 
 declaration_var_mul ::= type ESPACE NOM declaration_var_mul_nom PV;
 
-declaration_var_mul_nom ::= declaration_var_mul_nom VIRG NOM  | /*vide*/ ;
+declaration_var_mul_nom ::= declaration_var_mul_nom VIRG NOM declaration_var_mul_value  | /*vide*/ ;
 
-type			::= INT | NOTHING;
+declaration_var_mul_value ::= EGAL declaration_value | /* vide */;
+
+declaration_value ::= LIRE PO PF | calcul;
+
+ecrire ::= ECRIRE PO calcul PF PV;
+
+/***********************************************/
+/***************FIN VARIABLE********************/
+/***********************************************/
+
+
+
+
+
+
+
+
+/***********************************************/
+/***************APPEL FONCTION******************/
+/***********************************************/
+
+appel_fonction		::= NOM PO param_appel_fonction_rec PF;
+
+param_appel_fonction_rec ::= param_appel_fonction_rec param_appel_fonction | /*vide*/;
+
+param_appel_fonction ::= calcul | VIRG calcul;
+
+/***********************************************/
+/***************FIN APPEL FONCTION**************/
+/***********************************************/

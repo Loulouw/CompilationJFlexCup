@@ -11,6 +11,6 @@ func int f int a{
 	return x;
  }
 
-func void main{
+func nothing start{
 	j = f(i);
 }
