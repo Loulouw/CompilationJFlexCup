@@ -1,0 +1,17 @@
+func nothing fibonacci int n{
+	si ( n = 0){
+		return 0;
+	}sinon{
+		si ( n = 1){
+			return 1;
+		}sinon{
+			return fibonacci(n-1) + fibonacci(n-2);
+		}
+	}
+	
+
+}
+
+func nothing start{
+	ecrire(fibonacci(10));
+}
