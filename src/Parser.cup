@@ -7,20 +7,9 @@
  * (c) 2013
  */ 
 package fr.ul.miage.exemple.generated;
-import fr.ul.miage.exemple.*;
 
 /* Fonctions */
-action code{:
 
-	public HashMap<String,Integer> variableGolbale = new HashMap<>();
-	public HashMap<String,Fonction> fonctions = new HashMap<>();
-
-
-	public void ajouterVariableGlobal(String value){
-
-	}
-
-:}
 
 /* la grammaire */
 terminal CRO_OUVR, CRO_FERM, RETOUR, ESPACE, PV, VIRG;
@@ -50,7 +39,12 @@ l				::= actions;
 
 actions			::= actions ligne | /*vide*/;
 
-ligne			::= fonction | COMMENTAIRE | declaration_var | declaration_var_mul | RETOUR | ESPACE ;
+ligne			::= fonction 
+				| COMMENTAIRE 
+				| declaration_var:a {: System.out.println(a.toString()); :}
+				| declaration_var_mul:a {: System.out.println(a.toString()); :} 
+				| RETOUR 
+				| ESPACE ;
 
 type			::= INT | NOTHING;
 
@@ -143,13 +137,15 @@ c5 ::= appel_fonction :a {: RESULT=a.toString(); :}
 /***********************************************/
 affectation		::= NOM EGAL declaration_value PV;
 
-declaration_var	::= type ESPACE NOM:n EGAL declaration_value:v PV {: RESULT=n.toString() + v.toString(); :};
+declaration_var	::= type ESPACE NOM:n EGAL declaration_value:v PV {: RESULT=n.toString() + " " + v.toString(); :};
 
-declaration_var_mul ::= type ESPACE NOM declaration_var_mul_nom PV;
+declaration_var_mul ::= type ESPACE NOM:n declaration_var_mul_nom:v PV {: RESULT=n.toString() + " " + v.toString(); :};
 
-declaration_var_mul_nom ::= declaration_var_mul_nom VIRG NOM declaration_var_mul_value  | /*vide*/ ;
+declaration_var_mul_nom ::= declaration_var_mul_nom VIRG NOM:a declaration_var_mul_value:b {: RESULT="," + a.toString() + " " + b.toString(); :}
+						  | /*vide*/ ;
 
-declaration_var_mul_value ::= EGAL declaration_value | /* vide */;
+declaration_var_mul_value ::= EGAL declaration_value:a {: RESULT=a.toString(); :}
+							| /* vide */ {: RESULT=""; :};
 
 declaration_value ::= LIRE PO PF 
 					| calcul:c {: RESULT = c.toString(); :};
@@ -171,11 +167,13 @@ ecrire ::= ECRIRE PO calcul PF PV;
 /***************APPEL FONCTION******************/
 /***********************************************/
 
-appel_fonction		::= NOM:n PO param_appel_fonction_rec:p PF  {: RESULT=a.toString() + " " + b.toString(); :};
+appel_fonction		::= NOM:n PO param_appel_fonction_rec:p PF  {: RESULT=n.toString() + " " + p.toString(); :};
 
-param_appel_fonction_rec ::= param_appel_fonction_rec param_appel_fonction:p | /*vide*/;
+param_appel_fonction_rec ::= param_appel_fonction_rec param_appel_fonction:p {: RESULT = p.toString(); :}
+						| /*vide*/;
 
-param_appel_fonction ::= calcul:c | VIRG calcul:c;
+param_appel_fonction ::= calcul:c {: RESULT=c.toString(); :}
+						| VIRG calcul:c {: RESULT=c.toString(); :};
 
 /***********************************************/
 /***************FIN APPEL FONCTION**************/

@@ -1,7 +1,5 @@
 package fr.ul.miage.exemple;
 
-import java.util.ArrayList;
-
 public class Symbol {
 
 	private String nom;
