@@ -16,12 +16,19 @@ action code
 {:
 	private int rang = 0;
  	public void ajouterSymbol(String str){
-		String s[] = str.split(" ");
-		try{
-			SymbolVar sym = new SymbolVar(s[0], "int", "glob", Integer.parseInt(s[1]), rang);
-			System.out.println(sym);
-			rang ++;
-		}catch(Exception e){};
+		String values[] = str.split(",");
+		for(String value : values){
+			String s[] = value.split(" ");
+			try{
+				int val = 0;
+				if(s.length == 2) val = Integer.parseInt(s[1].trim());
+				SymbolVar sym = new SymbolVar(s[0].trim(), "int", "glob", val, rang);
+				System.out.println(sym);
+				rang ++;
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
 	}
 :}
 
@@ -56,7 +63,7 @@ actions			::= actions ligne | /*vide*/;
 ligne			::= fonction 
 				| COMMENTAIRE 
 				| declaration_var:a {: ajouterSymbol(a.toString()); :}
-				| declaration_var_mul:a {: System.out.println(a.toString()); :} 
+				| declaration_var_mul:a {: ajouterSymbol(a.toString()); :} 
 				| RETOUR 
 				| ESPACE ;
 
