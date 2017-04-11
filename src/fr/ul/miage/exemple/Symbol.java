@@ -5,14 +5,12 @@ public class Symbol {
 	private String nom;
 	private String type;
 	private String cat;
-	private Integer val;
 	
 	
-	public Symbol(String nom, String type, String cat, Integer val) {
+	public Symbol(String nom, String type, String cat) {
 		this.nom = nom;
 		this.type = type;
 		this.cat = cat;
-		this.val = val;
 	}
 
 
@@ -44,17 +42,6 @@ public class Symbol {
 	public void setCat(String cat) {
 		this.cat = cat;
 	}
-
-
-	public Integer getVal() {
-		return val;
-	}
-
-
-	public void setVal(Integer val) {
-		this.val = val;
-	}
-	
 	
 	
 }
