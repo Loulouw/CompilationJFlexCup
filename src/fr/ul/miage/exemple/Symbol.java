@@ -43,5 +43,10 @@ public class Symbol {
 		this.cat = cat;
 	}
 	
+	@Override
+	public String toString() {
+		return "Symbol [nom=" + nom + ", type=" + type + ", cat=" + cat + "]";
+	}
+	
 	
 }

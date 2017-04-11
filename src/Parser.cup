@@ -9,15 +9,19 @@
 package fr.ul.miage.exemple.generated;
 
 import java.util.*;
+import fr.ul.miage.exemple.*;
 
 /* Fonctions */
 action code 
 {:
+	private int rang = 0;
  	public void ajouterSymbol(String str){
 		String s[] = str.split(" ");
-		//Symbol sym = new Symbol(s[0], s[1], s[2], s[3]);
-		//tds.put(s[0], sym); 
-		System.out.println(s[0]);
+		try{
+			SymbolVar sym = new SymbolVar(s[0], "int", "glob", Integer.parseInt(s[1]), rang);
+			System.out.println(sym);
+			rang ++;
+		}catch(Exception e){};
 	}
 :}
 
