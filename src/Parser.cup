@@ -7,6 +7,20 @@
  * (c) 2013
  */ 
 package fr.ul.miage.exemple.generated;
+import fr.ul.miage.exemple.*;
+
+/* Fonctions */
+action code{:
+
+	public HashMap<String,Integer> variableGolbale = new HashMap<>();
+	public HashMap<String,Fonction> fonctions = new HashMap<>();
+
+
+	public void ajouterVariableGlobal(String value){
+
+	}
+
+:}
 
 /* la grammaire */
 terminal CRO_OUVR, CRO_FERM, RETOUR, ESPACE, PV, VIRG;
@@ -97,15 +111,22 @@ s5 ::= calcul;
 /***********************************************/
 /***************CALCUL**************************/
 /***********************************************/
-calcul ::= calcul PLUS c2 | c2;
+calcul ::= calcul:a PLUS c2:b {: RESULT=a.toString() + "+" + b.toString(); :}
+		| c2:a {: RESULT=a.toString(); :};
 
-c2 ::= c2 MOINS c3 | c3;
+c2 ::= c2:a MOINS c3:b {: RESULT=a.toString() + "-" + b.toString(); :}
+		| c3:a {: RESULT=a.toString(); :};
 
-c3 ::= c3 FOIS c4 | c4;
+c3 ::= c3:a FOIS c4:b {: RESULT=a.toString() + "*" + b.toString(); :}
+		| c4:a {: RESULT=a.toString(); :};
 
-c4 ::= c4 DIV c5 | c5;
+c4 ::= c4:a DIV c5:b {: RESULT=a.toString() + "/" + b.toString(); :}
+		| c5:a {: RESULT=a.toString(); :};
 
-c5 ::= appel_fonction | NOMBRE | PO calcul PF | NOM;
+c5 ::= appel_fonction :a {: RESULT=a.toString(); :}
+	| NOMBRE:a {: RESULT=a.toString(); :}
+	| PO calcul PF :a {: RESULT=a.toString(); :}
+	| NOM:a {: RESULT=a.toString(); :};
 
 
 /***********************************************/
@@ -122,7 +143,7 @@ c5 ::= appel_fonction | NOMBRE | PO calcul PF | NOM;
 /***********************************************/
 affectation		::= NOM EGAL declaration_value PV;
 
-declaration_var	::= type ESPACE NOM EGAL declaration_value PV;
+declaration_var	::= type ESPACE NOM:n EGAL declaration_value:v PV {: RESULT=n.toString() + v.toString(); :};
 
 declaration_var_mul ::= type ESPACE NOM declaration_var_mul_nom PV;
 
@@ -130,7 +151,8 @@ declaration_var_mul_nom ::= declaration_var_mul_nom VIRG NOM declaration_var_mul
 
 declaration_var_mul_value ::= EGAL declaration_value | /* vide */;
 
-declaration_value ::= LIRE PO PF | calcul;
+declaration_value ::= LIRE PO PF 
+					| calcul:c {: RESULT = c.toString(); :};
 
 ecrire ::= ECRIRE PO calcul PF PV;
 
@@ -149,11 +171,11 @@ ecrire ::= ECRIRE PO calcul PF PV;
 /***************APPEL FONCTION******************/
 /***********************************************/
 
-appel_fonction		::= NOM PO param_appel_fonction_rec PF;
+appel_fonction		::= NOM:n PO param_appel_fonction_rec:p PF  {: RESULT=a.toString() + " " + b.toString(); :};
 
-param_appel_fonction_rec ::= param_appel_fonction_rec param_appel_fonction | /*vide*/;
+param_appel_fonction_rec ::= param_appel_fonction_rec param_appel_fonction:p | /*vide*/;
 
-param_appel_fonction ::= calcul | VIRG calcul;
+param_appel_fonction ::= calcul:c | VIRG calcul:c;
 
 /***********************************************/
 /***************FIN APPEL FONCTION**************/

@@ -40,32 +40,32 @@ DIFF=[\ \t]*\!\=[\ \t]*
 %%
 
 /* regles */
-{COMMENTAIRE}		{ return new Symbol(sym.COMMENTAIRE); }
-{CRO_OUVR}			{ return new Symbol(sym.CRO_OUVR); }
-{CRO_FERM}			{ return new Symbol(sym.CRO_FERM); }
-"int"				{ return new Symbol(sym.INT); }
-"nothing"			{ return new Symbol(sym.NOTHING); }
-"func"				{ return new Symbol(sym.FUNC); }
-"return"			{ return new Symbol(sym.RETURN); }
-"si"				{ return new Symbol(sym.SI); }
-"sinon"				{ return new Symbol(sym.SINON); }
-"tq"				{ return new Symbol(sym.TQ); }
-"lire"				{ return new Symbol(sym.LIRE); }
-"ecrire"			{ return new Symbol(sym.ECRIRE); }
-{INF}				{ return new Symbol(sym.INF); }
-{SUP}				{ return new Symbol(sym.SUP); }
-{DIFF}				{ return new Symbol(sym.DIFF); }
-{PLUS}				{ return new Symbol(sym.PLUS); }
-{MOINS}				{ return new Symbol(sym.MOINS); }
-{FOIS}				{ return new Symbol(sym.FOIS); }
-{DIV}				{ return new Symbol(sym.DIV); }
-{PO}				{ return new Symbol(sym.PO); }
-{PF}				{ return new Symbol(sym.PF); }
-{EGAL}				{ return new Symbol(sym.EGAL); }
-{PV}				{ return new Symbol(sym.PV); }
-{VIRG}				{ return new Symbol(sym.VIRG); }
-{ESPACE}			{ return new Symbol(sym.ESPACE); }
-{NOMBRE}			{ return new Symbol(sym.NOMBRE); }
-{NOM}				{ return new Symbol(sym.NOM); }	
-{RETOUR}			{ return new Symbol(sym.RETOUR); }
+{COMMENTAIRE}		{ return new Symbol(sym.COMMENTAIRE, yytext()); }
+{CRO_OUVR}			{ return new Symbol(sym.CRO_OUVR, yytext()); }
+{CRO_FERM}			{ return new Symbol(sym.CRO_FERM, yytext()); }
+"int"				{ return new Symbol(sym.INT, yytext()); }
+"nothing"			{ return new Symbol(sym.NOTHING, yytext()); }
+"func"				{ return new Symbol(sym.FUNC, yytext()); }
+"return"			{ return new Symbol(sym.RETURN, yytext()); }
+"si"				{ return new Symbol(sym.SI, yytext()); }
+"sinon"				{ return new Symbol(sym.SINON, yytext()); }
+"tq"				{ return new Symbol(sym.TQ, yytext()); }
+"lire"				{ return new Symbol(sym.LIRE, yytext()); }
+"ecrire"			{ return new Symbol(sym.ECRIRE, yytext()); }
+{INF}				{ return new Symbol(sym.INF, yytext()); }
+{SUP}				{ return new Symbol(sym.SUP, yytext()); }
+{DIFF}				{ return new Symbol(sym.DIFF, yytext()); }
+{PLUS}				{ return new Symbol(sym.PLUS, yytext()); }
+{MOINS}				{ return new Symbol(sym.MOINS, yytext()); }
+{FOIS}				{ return new Symbol(sym.FOIS, yytext()); }
+{DIV}				{ return new Symbol(sym.DIV, yytext()); }
+{PO}				{ return new Symbol(sym.PO, yytext()); }
+{PF}				{ return new Symbol(sym.PF, yytext()); }
+{EGAL}				{ return new Symbol(sym.EGAL, yytext()); }
+{PV}				{ return new Symbol(sym.PV, yytext()); }
+{VIRG}				{ return new Symbol(sym.VIRG, yytext()); }
+{ESPACE}			{ return new Symbol(sym.ESPACE, yytext()); }
+{NOMBRE}			{ return new Symbol(sym.NOMBRE, yytext()); }
+{NOM}				{ return new Symbol(sym.NOM, yytext()); }	
+{RETOUR}			{ return new Symbol(sym.RETOUR, yytext()); }
 .					{ return null;}
