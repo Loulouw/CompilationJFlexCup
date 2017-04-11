@@ -12,12 +12,12 @@ import fr.ul.miage.exemple.*;
 /* Fonctions */
 action code{:
 
-	public HashMap<String,Integer> variableGolbale = new HashMap<>();
-	public HashMap<String,Fonction> fonctions = new HashMap<>();
+	public HashMap<String,Integer> tds = new HashMap<>();
 
-
-	public void ajouterVariableGlobal(String value){
-
+	public void ajouterSymbole(String str){
+		String s[] = str.split(' ');
+		Symbol s = new Symbol(s[0], s[1], , val);
+		tds.put(nom, s); 
 	}
 
 :}
@@ -50,13 +50,20 @@ l				::= actions;
 
 actions			::= actions ligne | /*vide*/;
 
-ligne			::= fonction | COMMENTAIRE | declaration_var | declaration_var_mul | RETOUR | ESPACE ;
+ligne			::= fonction 
+				| COMMENTAIRE 
+				| declaration_var:dec {: ajouterSymbole(dec.toString()) :}
+				| declaration_var_mul:dec2 
+				| RETOUR 
+				| ESPACE ;
 
-type			::= INT | NOTHING;
+type			::= INT 
+				| NOTHING;
 
 /***********************************************/
 /***************FONCTION************************/
 /***********************************************/
+
 fonction		::= FUNC ESPACE type ESPACE NOM param_fonction_rec CRO_OUVR content_function CRO_FERM;
 
 param_fonction_rec ::= param_fonction_rec param_fonction | /*vide*/ ;
