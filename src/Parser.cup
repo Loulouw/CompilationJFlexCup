@@ -8,17 +8,17 @@
  */ 
 package fr.ul.miage.exemple.generated;
 
+import java.util.*;
+
 /* Fonctions */
 action code 
 {:
-	public HashMap<String,Integer> tds = new HashMap<>();
-
-	public void ajouterSymbole(String str){
-		String s[] = str.split(' ');
-		Symbol s = new Symbol(s[0], s[1], , val);
-		tds.put(nom, s); 
+ 	public void ajouterSymbol(String str){
+		String s[] = str.split(" ");
+		//Symbol sym = new Symbol(s[0], s[1], s[2], s[3]);
+		//tds.put(s[0], sym); 
+		System.out.println(s[0]);
 	}
-
 :}
 
 /* la grammaire */
@@ -51,7 +51,7 @@ actions			::= actions ligne | /*vide*/;
 
 ligne			::= fonction 
 				| COMMENTAIRE 
-				| declaration_var:a {: System.out.println(a.toString()); :}
+				| declaration_var:a {: ajouterSymbol(a.toString()); :}
 				| declaration_var_mul:a {: System.out.println(a.toString()); :} 
 				| RETOUR 
 				| ESPACE ;
