@@ -11,14 +11,22 @@ package fr.ul.miage.exemple.generated;
 import java.util.*;
 import fr.ul.miage.exemple.symbol.*;
 import fr.ul.miage.exemple.arbre.*;
+import java.util.regex.*;
 
 /* Fonctions */
 action code 
 {:
+	private Programme programme = new Programme();
+
 	private ArrayList<Symbol> symbols = new ArrayList<>();
 	private ArrayList<SymbolVar> symbolParams = new ArrayList<>();
 	private ArrayList<SymbolVar> symbolVarsLoc = new ArrayList<>(); 
+	private ArrayList<Noeud> noeudsFonction = new ArrayList<>();
+	
 	private int rangVarGlobal = 0;
+
+	private Pattern patternVariable = Pattern.compile("^[a-zA-Z]+$");
+	private Pattern patternConstante = Pattern.compile("^-?[0-9]+$");
 
  	public void ajouterVar(String str,boolean glob){
 		String values[] = str.split(",");
@@ -42,21 +50,73 @@ action code
 		}
 	}
 
+
+
 	public void ajouterFunc(String str){
 		String values[] = str.split(" ");
 		SymbolFunc sym = new SymbolFunc(values[1].trim(),values[0].trim(),"func",symbolVarsLoc.size(),symbolParams.size());
 		symbols.add(sym);
+
+		Fonction fonction = new Fonction(symbols.size() - 1);
+		programme.ajouterFonction(fonction);
+
 		for(Symbol s : symbolParams) symbols.add(s);
 		for(Symbol s : symbolVarsLoc) symbols.add(s);
 		symbolParams.clear();
 		symbolVarsLoc.clear();
 	}
 
+
+
 	public void ajouterParam(String str){
 		String values[] = str.split(" ");
 		SymbolVar sym = new SymbolVar(values[1].trim(),"int","param",symbolParams.size());
 		symbolParams.add(sym);
 	}
+
+
+
+	public void ajouterAffectation(String str){
+		String values[] = str.split(" ");
+		Variable variable = new Variable(getVariablePlace(values[0].trim());
+		String expression = values[1].trim();			
+		Noeud objet;
+
+		if(patternConstante.matcher(expression).find()){
+			int cons = Integer.parseInt(values[1].trim());
+			objet = new Constante(cons);
+		}else if(patternVariable.matcher(expression).find(){
+			objet = new Variable(getVariablePlace(expression));
+		}else{
+			//Calcul a gerer
+		}
+
+		Affectation affectation = new Affectation(variable,objet);
+		noeudsFonction.add(affectation);
+	}
+
+
+
+
+
+	private int getVariablePlace(String name){
+		int res = -1;
+		ArrayList<Symbol> array = new ArrayList<>();
+		array.addAll(symbols);
+		array.add(new SymbolFunc("","","func",0,0));
+		array.addAll(symbolParams);
+		array.addAll(symbolVarsLoc);
+
+		for(int i=array.size()-1;i>=0;i--){
+			Symbol s = symbols.get(i);
+			if(s.getNom().equals(name) && !s.getCat().equals("func")){
+				res = i;
+				break;
+			}	
+		}
+		return res;
+	}
+
 
 	public void fin(){
 		for(Symbol s : symbols) System.out.println(s);
@@ -121,7 +181,7 @@ content_function_list ::= RETOUR | COMMENTAIRE
 						| ecrire 
 						| return 
 						| appel_fonction PV 
-						| affectation 
+						| affectation:a {::}
 						| declaration_var:a {: ajouterVar(a.toString(),false); :}  
 						| declaration_var_mul:a {: ajouterVar(a.toString(),false); :};
 
@@ -198,7 +258,7 @@ c5 ::= appel_fonction :a {: RESULT=a.toString(); :}
 /***********************************************/
 /***************VARIABLE************************/
 /***********************************************/
-affectation		::= NOM EGAL declaration_value PV;
+affectation		::= NOM:a EGAL declaration_value:b PV {: RESULT=a.toString() + " " + b.toString();:};
 
 declaration_var	::= type ESPACE NOM:n EGAL declaration_value:v PV {: RESULT=n.toString() + " " + v.toString(); :};
 
