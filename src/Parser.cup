@@ -9,7 +9,8 @@
 package fr.ul.miage.exemple.generated;
 
 import java.util.*;
-import fr.ul.miage.exemple.*;
+import fr.ul.miage.exemple.symbol.*;
+import fr.ul.miage.exemple.arbre.*;
 
 /* Fonctions */
 action code 

@@ -1,4 +1,4 @@
-package fr.ul.miage.exemple;
+package fr.ul.miage.exemple.symbol;
 
 public class SymbolVar extends Symbol{
 
