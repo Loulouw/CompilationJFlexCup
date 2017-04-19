@@ -1,5 +1,6 @@
 package fr.ul.miage.exemple.abre;
 
+
 public class Affectation implements Noeud {
 
 	private Noeud partieGauche;
