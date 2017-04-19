@@ -1,4 +1,4 @@
-package fr.ul.miage.exemple.abre;
+package fr.ul.miage.exemple.arbre;
 
 
 public class Affectation implements Noeud {
@@ -18,4 +18,11 @@ public class Affectation implements Noeud {
 	public Noeud getPartieDroite() {
 		return partieDroite;
 	}
+
+	@Override
+	public String toString() {
+		return "Affectation [partieGauche=" + partieGauche + ", partieDroite=" + partieDroite + "]";
+	}
+	
+	
 }

@@ -1,4 +1,4 @@
-package fr.ul.miage.exemple.abre;
+package fr.ul.miage.exemple.arbre;
 
 import java.util.ArrayList;
 
@@ -21,6 +21,11 @@ public class Fonction implements Noeud{
 
 	public ArrayList<Noeud> getNoeuds() {
 		return noeuds;
+	}
+
+	@Override
+	public String toString() {
+		return "Fonction [place=" + place + ", noeuds=" + noeuds + "]";
 	}
 
 	

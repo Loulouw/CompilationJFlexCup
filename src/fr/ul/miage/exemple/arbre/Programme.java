@@ -1,4 +1,4 @@
-package fr.ul.miage.exemple.abre;
+package fr.ul.miage.exemple.arbre;
 
 import java.util.ArrayList;
 
@@ -13,5 +13,12 @@ public class Programme {
 	public ArrayList<Noeud> getFonctions() {
 		return fonctions;
 	}
+
+	@Override
+	public String toString() {
+		return "Programme [fonctions=" + fonctions + "]";
+	}
+
+	
 	
 }

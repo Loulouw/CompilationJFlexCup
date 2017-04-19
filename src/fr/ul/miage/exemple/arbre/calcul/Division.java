@@ -1,6 +1,6 @@
-package fr.ul.miage.exemple.abre.calcul;
+package fr.ul.miage.exemple.arbre.calcul;
 
-import fr.ul.miage.exemple.abre.Noeud;
+import fr.ul.miage.exemple.arbre.Noeud;
 
 public class Division extends Calcul{
 

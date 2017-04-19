@@ -1,4 +1,4 @@
-package fr.ul.miage.exemple.abre;
+package fr.ul.miage.exemple.arbre;
 
 public class Constante implements Noeud {
 
@@ -11,5 +11,12 @@ public class Constante implements Noeud {
 	public int getValeur() {
 		return valeur;
 	}
+
+	@Override
+	public String toString() {
+		return "Constante [valeur=" + valeur + "]";
+	}
+	
+	
 	
 }

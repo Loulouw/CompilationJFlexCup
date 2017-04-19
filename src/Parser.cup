@@ -58,12 +58,14 @@ action code
 		symbols.add(sym);
 
 		Fonction fonction = new Fonction(symbols.size() - 1);
+		fonction.getNoeuds().addAll(noeudsFonction);
 		programme.ajouterFonction(fonction);
 
 		for(Symbol s : symbolParams) symbols.add(s);
 		for(Symbol s : symbolVarsLoc) symbols.add(s);
 		symbolParams.clear();
 		symbolVarsLoc.clear();
+		noeudsFonction.clear();
 	}
 
 
@@ -78,14 +80,14 @@ action code
 
 	public void ajouterAffectation(String str){
 		String values[] = str.split(" ");
-		Variable variable = new Variable(getVariablePlace(values[0].trim());
+		Variable variable = new Variable(getVariablePlace(values[0].trim()));
 		String expression = values[1].trim();			
-		Noeud objet;
+		Noeud objet =null;
 
 		if(patternConstante.matcher(expression).find()){
 			int cons = Integer.parseInt(values[1].trim());
 			objet = new Constante(cons);
-		}else if(patternVariable.matcher(expression).find(){
+		}else if(patternVariable.matcher(expression).find()){
 			objet = new Variable(getVariablePlace(expression));
 		}else{
 			//Calcul a gerer
@@ -108,7 +110,7 @@ action code
 		array.addAll(symbolVarsLoc);
 
 		for(int i=array.size()-1;i>=0;i--){
-			Symbol s = symbols.get(i);
+			Symbol s = array.get(i);
 			if(s.getNom().equals(name) && !s.getCat().equals("func")){
 				res = i;
 				break;
@@ -120,6 +122,7 @@ action code
 
 	public void fin(){
 		for(Symbol s : symbols) System.out.println(s);
+		System.out.println(programme);
 	}
 :}
 
@@ -181,7 +184,7 @@ content_function_list ::= RETOUR | COMMENTAIRE
 						| ecrire 
 						| return 
 						| appel_fonction PV 
-						| affectation:a {::}
+						| affectation:a {: ajouterAffectation(a.toString()); :}
 						| declaration_var:a {: ajouterVar(a.toString(),false); :}  
 						| declaration_var_mul:a {: ajouterVar(a.toString(),false); :};
 

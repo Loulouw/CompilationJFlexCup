@@ -1,4 +1,4 @@
-package fr.ul.miage.exemple.abre;
+package fr.ul.miage.exemple.arbre;
 
 public class Variable implements Noeud {
 
@@ -10,6 +10,11 @@ public class Variable implements Noeud {
 
 	public int getPlace() {
 		return place;
+	}
+
+	@Override
+	public String toString() {
+		return "Variable [place=" + place + "]";
 	}
 	
 	
