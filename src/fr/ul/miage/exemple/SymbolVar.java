@@ -1,14 +1,12 @@
 package fr.ul.miage.exemple;
 
 public class SymbolVar extends Symbol{
-	
-	private int rang; //Place dans la pile (a vérifier)
-	private int val;
 
-	public SymbolVar(String nom, String type, String cat, int val, int rang) {
+	private int rang;
+	
+	public SymbolVar(String nom, String type, String cat,int rang) {
 		super(nom, type, cat);
-		this.rang = rang;	
-		this.val = val;
+		this.rang = rang;
 	}
 
 	public int getRang() {
@@ -19,19 +17,10 @@ public class SymbolVar extends Symbol{
 		this.rang = rang;
 	}
 
-	public int getVal() {
-		return val;
-	}
-
-	public void setVal(int val) {
-		this.val = val;
-	}
-
 	@Override
 	public String toString() {
-		return super.toString() + "SymbolVar [rang=" + rang + ", val=" + val + "]";
+		return super.toString() + "SymbolVar [rang=" + rang + "]";
 	}
-
 	
 	
 

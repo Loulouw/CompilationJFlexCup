@@ -1,0 +1,11 @@
+/* Test g�n�ration de code : variables globales */
+ 
+int i = 2;
+int j, k;
+ 
+func nothing start{
+	int k=1;
+	int j=k;
+	int k=i;
+}
+ 

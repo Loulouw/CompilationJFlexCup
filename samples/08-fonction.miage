@@ -6,6 +6,8 @@ int i = 1;
 int j = 2;
 
 func int f int a{
+	int z;
+	int y = 0;
 	return 3;
  }
 

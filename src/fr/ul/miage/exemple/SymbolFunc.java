@@ -27,4 +27,11 @@ public class SymbolFunc extends Symbol{
 		this.nbParam = nbParam;
 	}
 
+	@Override
+	public String toString() {
+		return super.toString() + "SymbolFunc [nbBloc=" + nbBloc + ", nbParam=" + nbParam + "]";
+	}
+	
+	
+
 }

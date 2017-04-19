@@ -14,21 +14,51 @@ import fr.ul.miage.exemple.*;
 /* Fonctions */
 action code 
 {:
-	private int rang = 0;
- 	public void ajouterSymbol(String str){
+	private ArrayList<Symbol> symbols = new ArrayList<>();
+	private ArrayList<SymbolVar> symbolParams = new ArrayList<>();
+	private ArrayList<SymbolVar> symbolVarsLoc = new ArrayList<>(); 
+	private int rangVarGlobal = 0;
+
+ 	public void ajouterVar(String str,boolean glob){
 		String values[] = str.split(",");
+		
 		for(String value : values){
 			String s[] = value.split(" ");
 			try{
-				int val = 0;
-				if(s.length == 2) val = Integer.parseInt(s[1].trim());
-				SymbolVar sym = new SymbolVar(s[0].trim(), "int", "glob", val, rang);
-				System.out.println(sym);
-				rang ++;
+				if(glob){
+					int val = 0;
+					if(s.length == 2) val = Integer.parseInt(s[1].trim());
+					SymbolVarGlob sym = new SymbolVarGlob(s[0].trim(), "int", "glob", val, rangVarGlobal);
+					symbols.add(sym);
+					rangVarGlobal ++;
+				}else{	
+					SymbolVar sym = new SymbolVar(s[0].trim(),"int","loc",symbolVarsLoc.size());
+					symbolVarsLoc.add(sym);
+				}
 			}catch(Exception e){
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public void ajouterFunc(String str){
+		String values[] = str.split(" ");
+		SymbolFunc sym = new SymbolFunc(values[1].trim(),values[0].trim(),"func",symbolVarsLoc.size(),symbolParams.size());
+		symbols.add(sym);
+		for(Symbol s : symbolParams) symbols.add(s);
+		for(Symbol s : symbolVarsLoc) symbols.add(s);
+		symbolParams.clear();
+		symbolVarsLoc.clear();
+	}
+
+	public void ajouterParam(String str){
+		String values[] = str.split(" ");
+		SymbolVar sym = new SymbolVar(values[1].trim(),"int","param",symbolParams.size());
+		symbolParams.add(sym);
+	}
+
+	public void fin(){
+		for(Symbol s : symbols) System.out.println(s);
 	}
 :}
 
@@ -56,34 +86,43 @@ precedence nonassoc PO;	// Inserted by Eclipse plugin
 
 start with l;
 
-l				::= actions;
+l				::= actions {: fin(); :};
 
 actions			::= actions ligne | /*vide*/;
 
 ligne			::= fonction 
 				| COMMENTAIRE 
-				| declaration_var:a {: ajouterSymbol(a.toString()); :}
-				| declaration_var_mul:a {: ajouterSymbol(a.toString()); :} 
+				| declaration_var:a {: ajouterVar(a.toString(),true); :}
+				| declaration_var_mul:a {: ajouterVar(a.toString(),true); :} 
 				| RETOUR 
 				| ESPACE ;
 
-type			::= INT 
-				| NOTHING;
+type			::= INT:a {: RESULT=a.toString(); :} 
+				| NOTHING:a {: RESULT=a.toString(); :};
 
 /***********************************************/
 /***************FONCTION************************/
 /***********************************************/
 
-fonction		::= FUNC ESPACE type ESPACE NOM param_fonction_rec CRO_OUVR content_function CRO_FERM;
+fonction		::= FUNC ESPACE type:a ESPACE NOM:b param_fonction_rec CRO_OUVR content_function CRO_FERM {: ajouterFunc(a.toString() + " " + b.toString()); :};
 
 param_fonction_rec ::= param_fonction_rec param_fonction | /*vide*/ ;
 
-param_fonction ::= ESPACE type ESPACE NOM VIRG | ESPACE type ESPACE NOM;
+param_fonction ::= ESPACE type:a ESPACE NOM:b VIRG {: ajouterParam(a.toString() + " " + b.toString()); :} 
+				| ESPACE type:a ESPACE NOM:b {: ajouterParam(a.toString() + " " + b.toString()); :};
 
 
 content_function	::= content_function content_function_list | /*vide*/ ;
 
-content_function_list ::= RETOUR | COMMENTAIRE | si | tq | ecrire | return | appel_fonction PV | affectation | declaration_var | declaration_var_mul;
+content_function_list ::= RETOUR | COMMENTAIRE 
+						| si 
+						| tq 
+						| ecrire 
+						| return 
+						| appel_fonction PV 
+						| affectation 
+						| declaration_var:a {: ajouterVar(a.toString(),false); :}  
+						| declaration_var_mul:a {: ajouterVar(a.toString(),false); :};
 
 return 			::= RETURN ESPACE calcul PV ;
 
@@ -165,7 +204,7 @@ declaration_var	::= type ESPACE NOM:n EGAL declaration_value:v PV {: RESULT=n.to
 declaration_var_mul ::= type ESPACE NOM:n declaration_var_mul_nom:v PV {: RESULT=n.toString() + " " + v.toString(); :};
 
 declaration_var_mul_nom ::= declaration_var_mul_nom VIRG NOM:a declaration_var_mul_value:b {: RESULT="," + a.toString() + " " + b.toString(); :}
-						  | /*vide*/ ;
+						  | /*vide*/ {:RESULT="";:};
 
 declaration_var_mul_value ::= EGAL declaration_value:a {: RESULT=a.toString(); :}
 							| /* vide */ {: RESULT=""; :};
