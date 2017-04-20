@@ -19,6 +19,7 @@ public class ConvertionArbre {
 	private static Noeud convertionEnArbre(String postfix){
 		ArrayList<Object> part = new ArrayList<>(Arrays.asList(postfix.split(" ")));
         boolean fin = false;
+        System.out.println(postfix);
         while (!fin) {
             Noeud prec1 = null;
             Noeud prec2 = null;
@@ -27,6 +28,10 @@ public class ConvertionArbre {
                 Noeud noeud = null;
                 if (obj instanceof String) {
                     noeud = Utils.convertToNoeud((String) obj);
+                    if(noeud != null){
+                    	part.remove(i);
+                    	part.add(i,noeud);
+                    }
                 } else if (obj instanceof Noeud) {
                     noeud = (Noeud) obj;
                 }

@@ -11,7 +11,8 @@ package fr.ul.miage.exemple.generated;
 import java.util.*;
 import fr.ul.miage.exemple.symbol.*;
 import fr.ul.miage.exemple.arbre.*;
-import fr.ul.moage.exmple.utils.*;
+import fr.ul.miage.exemple.utils.*;
+import fr.ul.miage.exemple.arbre.calcul.*;
 import java.util.regex.*;
 
 /* Fonctions */
@@ -39,7 +40,7 @@ action code
 					Utils.symbols.add(sym);
 					rangVarGlobal ++;
 				}else{	
-					SymbolVar sym = new SymbolVar(s[0].trim(),"int","loc",symbolVarsLoc.size());
+					SymbolVar sym = new SymbolVar(s[0].trim(),"int","loc",Utils.symbolVarsLoc.size());
 					Utils.symbolVarsLoc.add(sym);
 				}
 			}catch(Exception e){
@@ -52,15 +53,15 @@ action code
 
 	public void ajouterFunc(String str){
 		String values[] = str.split(" ");
-		SymbolFunc sym = new SymbolFunc(values[1].trim(),values[0].trim(),"func",symbolVarsLoc.size(),symbolParams.size());
+		SymbolFunc sym = new SymbolFunc(values[1].trim(),values[0].trim(),"func",Utils.symbolVarsLoc.size(),Utils.symbolParams.size());
 		Utils.symbols.add(sym);
 
-		Fonction fonction = new Fonction(symbols.size() - 1);
+		Fonction fonction = new Fonction(Utils.symbols.size() - 1);
 		fonction.getNoeuds().addAll(noeudsFonction);
 		programme.ajouterFonction(fonction);
 
-		for(Symbol s : symbolParams) symbols.add(s);
-		for(Symbol s : symbolVarsLoc) symbols.add(s);
+		for(Symbol s : Utils.symbolParams) Utils.symbols.add(s);
+		for(Symbol s : Utils.symbolVarsLoc) Utils.symbols.add(s);
 		Utils.symbolParams.clear();
 		Utils.symbolVarsLoc.clear();
 		noeudsFonction.clear();
@@ -70,7 +71,7 @@ action code
 
 	public void ajouterParam(String str){
 		String values[] = str.split(" ");
-		SymbolVar sym = new SymbolVar(values[1].trim(),"int","param",symbolParams.size());
+		SymbolVar sym = new SymbolVar(values[1].trim(),"int","param",Utils.symbolParams.size());
 		Utils.symbolParams.add(sym);
 	}
 
