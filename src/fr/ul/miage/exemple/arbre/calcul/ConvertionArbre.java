@@ -6,9 +6,7 @@ import java.util.Arrays;
 import java.util.Stack;
 import java.util.regex.Pattern;
 
-import fr.ul.miage.exemple.arbre.Constante;
 import fr.ul.miage.exemple.arbre.Noeud;
-import fr.ul.miage.exemple.arbre.Variable;
 import fr.ul.miage.exemple.utils.Utils;
 
 public class ConvertionArbre {
