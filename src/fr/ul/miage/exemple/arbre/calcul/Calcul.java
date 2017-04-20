@@ -19,6 +19,11 @@ public abstract class Calcul implements Noeud {
 	public Noeud getPartieDroite() {
 		return partieDroite;
 	}
+
+	@Override
+	public String toString() {
+		return super.toString() + "Calcul [partieGauche=" + partieGauche + ", partieDroite=" + partieDroite + "]";
+	}
 	
 	
 	

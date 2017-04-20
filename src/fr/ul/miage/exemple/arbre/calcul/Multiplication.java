@@ -9,4 +9,9 @@ public class Multiplication extends Calcul{
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	public String toString() {
+		return super.toString() + "Multiplication []";
+	}
+
 }
