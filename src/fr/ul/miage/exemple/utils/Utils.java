@@ -25,7 +25,7 @@ public class Utils {
         if (patternConstante.matcher(val).find()) {
             res = new Constante(Integer.parseInt(val));
         } else if (patternVariable.matcher(val).find()) {
-            res = new Variable(0);
+            res = new Variable(Utils.getVariablePlace(val));
         }
 
         return res;

@@ -211,7 +211,7 @@ c4 ::= c4:a DIV c5:b {: RESULT=a.toString() + "/" + b.toString(); :}
 
 c5 ::= appel_fonction :a {: RESULT=a.toString(); :}
 	| NOMBRE:a {: RESULT=a.toString(); :}
-	| PO calcul PF :a {: RESULT=a.toString(); :}
+	| PO calcul:a PF {: RESULT="(" + a.toString() + ")"; :}
 	| NOM:a {: RESULT=a.toString(); :};
 
 

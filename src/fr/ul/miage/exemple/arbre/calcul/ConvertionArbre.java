@@ -12,14 +12,14 @@ import fr.ul.miage.exemple.utils.Utils;
 public class ConvertionArbre {
 	
 	public static Noeud convertirCalcul(String chaine){
-		return convertionEnArbre(convertToPostfix(chaine));
+		return convertionEnArbre(convertToPostfix(chaine.trim()));
 	}
 	
 
 	private static Noeud convertionEnArbre(String postfix){
 		ArrayList<Object> part = new ArrayList<>(Arrays.asList(postfix.split(" ")));
+		System.out.println(postfix);
         boolean fin = false;
-        System.out.println(postfix);
         while (!fin) {
             Noeud prec1 = null;
             Noeud prec2 = null;
@@ -64,8 +64,12 @@ public class ConvertionArbre {
             }
             if (part.size() == 1) fin = true;
         }
-
-        return (Noeud) part.get(0);
+        
+        Noeud n = null;
+        if(part.get(0) instanceof Noeud){
+        	n = (Noeud) part.get(0);
+        }
+        return n;
 	}
 	
     private static boolean estUnOperateur(String s) {

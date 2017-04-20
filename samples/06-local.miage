@@ -5,8 +5,6 @@
 int i, j,k;
 
 func int f{
-	int i;
-	
 	i = 1;
 	j = i + g();
 	return j;

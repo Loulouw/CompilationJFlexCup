@@ -22,7 +22,7 @@ public abstract class Calcul implements Noeud {
 
 	@Override
 	public String toString() {
-		return super.toString() + "Calcul [partieGauche=" + partieGauche + ", partieDroite=" + partieDroite + "]";
+		return "Calcul [partieGauche=" + partieGauche + ", partieDroite=" + partieDroite + "]";
 	}
 	
 	
