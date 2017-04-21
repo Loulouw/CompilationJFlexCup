@@ -4,8 +4,9 @@ int i = 2;
 int j, k;
  
 func nothing start{
-	int k=1;
-	int j=k;
-	int k=i;
+	int i=1;
+	i=k;
+	int z=i;
+	int j;
 }
  

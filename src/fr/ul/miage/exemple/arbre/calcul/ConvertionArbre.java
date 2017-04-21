@@ -17,8 +17,7 @@ public class ConvertionArbre {
 	
 
 	private static Noeud convertionEnArbre(String postfix){
-		ArrayList<Object> part = new ArrayList<>(Arrays.asList(postfix.split(" ")));
-		System.out.println(postfix);
+		ArrayList<Object> part = new ArrayList<>(Arrays.asList(postfix.split("[ \t]+")));
         boolean fin = false;
         while (!fin) {
             Noeud prec1 = null;
@@ -100,18 +99,18 @@ public class ConvertionArbre {
         String caracPrec = "";
         String carac;
         String temp = "";
-
+        System.out.println(infix);
         for (int i = 0; i < infix.length(); i++) {
             carac = Character.toString(infix.charAt(i));
-
+            
             if (estUnOperand(carac)) {
                 temp += carac;
-                if (i + 1 == infix.length()) postfix.append(temp + " ");
             } else {
                 if (carac.equals("(") && estUnOperand(caracPrec)) {
+          
                     int pf = 1;
                     temp += carac;
-                    while (pf != 0) {
+                    while (pf != 0) { 
                         i++;
                         String c = Character.toString(infix.charAt(i));
                         if (c.equals(")")) {
@@ -121,6 +120,8 @@ public class ConvertionArbre {
                         }
                         temp += c;
                     }
+                    postfix.append(temp + " ");
+                    temp = "";
                 } else {
                     if (!temp.equals("")) {
                         postfix.append(temp + " ");
@@ -146,6 +147,9 @@ public class ConvertionArbre {
                 }
             }
             caracPrec = carac;
+            if (i + 1 >= infix.length()){
+            	postfix.append(temp + " ");
+            }
         }
         while (!pile.isEmpty()) postfix.append(pile.pop() + " ");
         return postfix.toString();

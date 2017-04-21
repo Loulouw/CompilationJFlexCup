@@ -6,6 +6,7 @@ public class Fonction implements Noeud{
 	
 	private int place;
 	private ArrayList<Noeud> noeuds = new ArrayList();
+	private Noeud retour;
 	
 	public Fonction(int place){
 		this.place = place;

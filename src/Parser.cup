@@ -31,7 +31,7 @@ action code
 		String values[] = str.split(",");
 		
 		for(String value : values){
-			String s[] = value.split(" ");
+			String s[] = value.split("[ \t]+");
 			try{
 				if(glob){
 					int val = 0;
@@ -42,6 +42,13 @@ action code
 				}else{	
 					SymbolVar sym = new SymbolVar(s[0].trim(),"int","loc",Utils.symbolVarsLoc.size());
 					Utils.symbolVarsLoc.add(sym);
+					String affec = s[0].trim() + " ";
+					if(s.length == 2){
+						affec += s[1].trim();
+					}else{
+						affec += "0";
+					}
+					ajouterAffectation(affec);
 				}
 			}catch(Exception e){
 				e.printStackTrace();
@@ -52,7 +59,7 @@ action code
 
 
 	public void ajouterFunc(String str){
-		String values[] = str.split(" ");
+		String values[] = str.split("[ \t]+");
 		SymbolFunc sym = new SymbolFunc(values[1].trim(),values[0].trim(),"func",Utils.symbolVarsLoc.size(),Utils.symbolParams.size());
 		Utils.symbols.add(sym);
 
@@ -70,7 +77,7 @@ action code
 
 
 	public void ajouterParam(String str){
-		String values[] = str.split(" ");
+		String values[] = str.split("[ \t]+");
 		SymbolVar sym = new SymbolVar(values[1].trim(),"int","param",Utils.symbolParams.size());
 		Utils.symbolParams.add(sym);
 	}
@@ -78,18 +85,33 @@ action code
 
 
 	public void ajouterAffectation(String str){
-		String values[] = str.split(" ");
+		String values[] = str.split("[ \t]+");
 		Variable variable = new Variable(Utils.getVariablePlace(values[0].trim()));
-		Noeud noeud = ConvertionArbre.convertirCalcul(values[1].trim());
+		Noeud noeud;
+		if(values[1].trim().equals("lire")){
+			noeud = new Lire();
+		}else{
+			noeud = ConvertionArbre.convertirCalcul(values[1].trim());
+		}
 		Affectation affectation = new Affectation(variable,noeud);
 		noeudsFonction.add(affectation);
 	}
+	
+	public void ajouterRetour(String str){
+		Retour retour = new Retour(ConvertionArbre.convertirCalcul(str.trim()));
+		noeudsFonction.add(retour);
+	}
 
+	public void ajouterEcrire(String str){
+		Ecrire ecrire = new Ecrire(ConvertionArbre.convertirCalcul(str.trim()));
+		noeudsFonction.add(ecrire);
+	}
 
 	public void fin(){
 		for(Symbol s : Utils.symbols) System.out.println(s);
 		System.out.println(programme);
 	}
+	
 :}
 
 /* la grammaire */
@@ -147,14 +169,14 @@ content_function	::= content_function content_function_list | /*vide*/ ;
 content_function_list ::= RETOUR | COMMENTAIRE 
 						| si 
 						| tq 
-						| ecrire 
-						| return 
+						| ecrire:a {: ajouterEcrire(a.toString()); :}
+						| return:a {: ajouterRetour(a.toString()); :}
 						| appel_fonction PV 
 						| affectation:a {: ajouterAffectation(a.toString()); :}
-						| declaration_var:a {: ajouterVar(a.toString(),false); :}  
+						| declaration_var:a {: ajouterVar(a.toString(),false); :}
 						| declaration_var_mul:a {: ajouterVar(a.toString(),false); :};
 
-return 			::= RETURN ESPACE calcul PV ;
+return 			::= RETURN ESPACE calcul:a PV {: RESULT=a.toString(); :};
 
 /***********************************************/
 /***************FIN FONCTION********************/
@@ -233,16 +255,16 @@ declaration_var	::= type ESPACE NOM:n EGAL declaration_value:v PV {: RESULT=n.to
 
 declaration_var_mul ::= type ESPACE NOM:n declaration_var_mul_nom:v PV {: RESULT=n.toString() + " " + v.toString(); :};
 
-declaration_var_mul_nom ::= declaration_var_mul_nom VIRG NOM:a declaration_var_mul_value:b {: RESULT="," + a.toString() + " " + b.toString(); :}
+declaration_var_mul_nom ::= declaration_var_mul_nom:c VIRG NOM:a declaration_var_mul_value:b {: RESULT=c.toString() + "," + a.toString() + " " + b.toString(); :}
 						  | /*vide*/ {:RESULT="";:};
 
 declaration_var_mul_value ::= EGAL declaration_value:a {: RESULT=a.toString(); :}
 							| /* vide */ {: RESULT=""; :};
 
-declaration_value ::= LIRE PO PF 
+declaration_value ::= LIRE PO PF {: RESULT = "lire"; :}
 					| calcul:c {: RESULT = c.toString(); :};
 
-ecrire ::= ECRIRE PO calcul PF PV;
+ecrire ::= ECRIRE PO calcul:a PF PV {: RESULT=a.toString(); :};
 
 /***********************************************/
 /***************FIN VARIABLE********************/
@@ -259,13 +281,13 @@ ecrire ::= ECRIRE PO calcul PF PV;
 /***************APPEL FONCTION******************/
 /***********************************************/
 
-appel_fonction		::= NOM:n PO param_appel_fonction_rec:p PF  {: RESULT=n.toString() + " " + p.toString(); :};
+appel_fonction		::= NOM:n PO param_appel_fonction_rec:p PF  {: RESULT=n.toString() + "(" + p.toString() +")"; :};
 
-param_appel_fonction_rec ::= param_appel_fonction_rec param_appel_fonction:p {: RESULT = p.toString(); :}
-						| /*vide*/;
+param_appel_fonction_rec ::= param_appel_fonction_rec:a param_appel_fonction:p {: RESULT =a.toString() + p.toString(); :}
+						| /*vide*/ {: RESULT = ""; :};
 
 param_appel_fonction ::= calcul:c {: RESULT=c.toString(); :}
-						| VIRG calcul:c {: RESULT=c.toString(); :};
+						| VIRG calcul:c {: RESULT=","+c.toString(); :};
 
 /***********************************************/
 /***************FIN APPEL FONCTION**************/

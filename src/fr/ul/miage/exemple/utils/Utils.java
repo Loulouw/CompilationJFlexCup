@@ -16,7 +16,6 @@ public class Utils {
 	public static ArrayList<SymbolVar> symbolParams = new ArrayList<>();
 	public static ArrayList<SymbolVar> symbolVarsLoc = new ArrayList<>();
 	
-	
 	public static Noeud convertToNoeud(String val) {
         Pattern patternVariable = Pattern.compile("^[a-zA-Z]+$");
         Pattern patternConstante = Pattern.compile("^-?[0-9]+$");
@@ -52,6 +51,12 @@ public class Utils {
 				break;
 			}	
 		}
+		return res;
+	}
+	
+	public static int getFonctionPlace(String name){
+		int res = -1;
+		
 		return res;
 	}
 }
