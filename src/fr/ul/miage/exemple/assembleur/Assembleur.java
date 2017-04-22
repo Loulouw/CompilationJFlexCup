@@ -5,6 +5,7 @@ import java.util.*;
 import fr.ul.miage.exemple.arbre.*;
 import fr.ul.miage.exemple.arbre.calcul.*;
 import fr.ul.miage.exemple.symbol.*;
+import fr.ul.miage.exemple.utils.Utils;
 
 
 public class Assembleur {
@@ -67,10 +68,10 @@ public class Assembleur {
 	}
 
 	private String genererAffectation(Noeud noeudGauche,Noeud noeudDroit) {
-		String res = "";
-		Variable partieGauche = (Variable)noeudGauche;
-	
-		res += getCalcul(noeudDroit);
+		Variable partieGauche = (Variable)noeudGauche;	
+		String res = getCalcul(noeudDroit) + 
+		"POP(R0)\n" + 
+		"STORE(R0," + symbols.get(partieGauche.getPlace()).getNom() +")\n";	
 		
 		return res;
 	}
@@ -78,11 +79,13 @@ public class Assembleur {
 	private String getCalcul(Noeud n){
 		String res = "";
 		if(n instanceof Variable){
-			Variable v = (Variable)n;
-			
+			Variable v = (Variable)n;	
+			res += "LD(" + symbols.get(v.getPlace()).getNom() + ",RO)\n" +
+			"PUSH(R0)\n";
 		}else if(n instanceof Constante){
 			Constante c = (Constante)n;
-			
+			res += "MOVE(" + c.getValeur() + ",R0)\n" + 
+			"PUSH(R0)\n";				
 		}else if(n instanceof AppelFonction){
 			AppelFonction f = (AppelFonction)n;
 			
