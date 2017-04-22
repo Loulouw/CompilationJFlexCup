@@ -18,7 +18,7 @@ public class Assembleur {
 		this.symbols = symbols;
 		fichierAssembleur = ".include beta.uasm\n" +
 		"CMOVE(pile, SP)\n" +
-		"CALL(main)\n" +
+		"CALL(start)\n" +
 		"HALT()\n\n";
 	}
 	
@@ -28,10 +28,16 @@ public class Assembleur {
 		for (Symbol symbol : symbols) {
 			if(symbol instanceof SymbolVarGlob){
 				fichierAssembleur += symbol.getNom() + ": LONG(0)\n"; 
+			}else if (symbol instanceof SymbolFunc) {
+				genererFonction(symbol.getNom());
 			}
 		}
 		
 		System.out.println(fichierAssembleur);
+	}
+
+	private void genererFonction(String nom) {
+		fichierAssembleur += nom + ":" + noeudsFonction.toString();
 	}
 	
 	

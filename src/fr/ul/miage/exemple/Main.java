@@ -25,7 +25,7 @@ public class Main {
 		File[] listFiles = directory.listFiles();
 		try {
 			//for(int i=1;i<=7;i++){
-				ParserCup parser = new ParserCup(new Yylex(new FileReader(listFiles[13])));
+				ParserCup parser = new ParserCup(new Yylex(new FileReader(listFiles[6])));
 				parser.parse();
 			//}
 			
