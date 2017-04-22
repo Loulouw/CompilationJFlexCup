@@ -2,6 +2,7 @@ package fr.ul.miage.exemple.assembleur;
 
 import java.util.*;
 import fr.ul.miage.exemple.arbre.Noeud;
+import fr.ul.miage.exemple.arbre.Programme;
 import fr.ul.miage.exemple.symbol.Symbol;
 import fr.ul.miage.exemple.symbol.SymbolFunc;
 import fr.ul.miage.exemple.symbol.SymbolVarGlob;
@@ -9,12 +10,12 @@ import fr.ul.miage.exemple.symbol.SymbolVarGlob;
 
 public class Assembleur {
 
-	private ArrayList<Noeud> noeudsFonction = new ArrayList<>();
-	private ArrayList<Symbol> symbols = new ArrayList();
+	private Programme programme;
+	private ArrayList<Symbol> symbols;
 	private String fichierAssembleur;
 	
-	public Assembleur(ArrayList<Noeud> noeudsFonction, ArrayList<Symbol> symbols){
-		this.noeudsFonction = noeudsFonction;
+	public Assembleur(Programme programme, ArrayList<Symbol> symbols){
+		this.programme = programme;
 		this.symbols = symbols;
 		fichierAssembleur = ".include beta.uasm\n" +
 		"CMOVE(pile, SP)\n" +
@@ -37,7 +38,7 @@ public class Assembleur {
 	}
 
 	private void genererFonction(String nom) {
-		fichierAssembleur += nom + ":" + noeudsFonction.toString();
+		fichierAssembleur += nom + ":" + programme.toString();
 	}
 	
 	
