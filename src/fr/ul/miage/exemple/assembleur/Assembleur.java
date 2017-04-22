@@ -2,13 +2,9 @@ package fr.ul.miage.exemple.assembleur;
 
 import java.util.*;
 
-import fr.ul.miage.exemple.arbre.Affectation;
-import fr.ul.miage.exemple.arbre.Fonction;
-import fr.ul.miage.exemple.arbre.Noeud;
-import fr.ul.miage.exemple.arbre.Programme;
-import fr.ul.miage.exemple.symbol.Symbol;
-import fr.ul.miage.exemple.symbol.SymbolFunc;
-import fr.ul.miage.exemple.symbol.SymbolVarGlob;
+import fr.ul.miage.exemple.arbre.*;
+import fr.ul.miage.exemple.arbre.calcul.*;
+import fr.ul.miage.exemple.symbol.*;
 
 
 public class Assembleur {
@@ -71,11 +67,45 @@ public class Assembleur {
 	}
 
 	private String genererAffectation(Noeud noeudGauche,Noeud noeudDroit) {
-		System.out.println(noeudGauche.toString());
-		/*String res = "POP(R0)\n" +
-		"STORE(R0," + noeudGauche."\n" + 
-		"";
-		return res;*/
+		String res = "";
+		Variable partieGauche = (Variable)noeudGauche;
+	
+		res += getCalcul(noeudDroit);
+		
+		return res;
+	}
+	
+	private String getCalcul(Noeud n){
+		String res = "";
+		if(n instanceof Variable){
+			Variable v = (Variable)n;
+			
+		}else if(n instanceof Constante){
+			Constante c = (Constante)n;
+			
+		}else if(n instanceof AppelFonction){
+			AppelFonction f = (AppelFonction)n;
+			
+		}else if(n instanceof Calcul){
+			Noeud g = ((Calcul)n).getPartieGauche();
+			String partieGauche = getCalcul(g);
+			
+			Noeud d = ((Calcul)n).getPartieDroite();
+			String partieDroite = getCalcul(d);
+			
+			if(n instanceof Addition){
+				
+			}else if(n instanceof Soustraction){
+				
+			}else if(n instanceof Multiplication){
+				
+			}else if(n instanceof Division){
+				
+			}
+			
+		}
+		
+		return res;
 	}
 	
 	
