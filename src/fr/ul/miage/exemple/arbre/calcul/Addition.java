@@ -11,7 +11,7 @@ public class Addition extends Calcul {
 
 	@Override
 	public String toString() {
-		return super.toString() + "Addition []";
+		return "{" + super.getPartieGauche() + " + " +super.getPartieDroite() + "}";
 	}
 
 	

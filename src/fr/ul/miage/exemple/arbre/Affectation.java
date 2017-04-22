@@ -21,7 +21,7 @@ public class Affectation implements Noeud {
 
 	@Override
 	public String toString() {
-		return "Affectation [partieGauche=" + partieGauche + ", partieDroite=" + partieDroite + "]";
+		return "\nAffectation : " + partieGauche + " = " + partieDroite;
 	}
 	
 	

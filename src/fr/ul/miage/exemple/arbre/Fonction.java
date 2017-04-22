@@ -2,6 +2,8 @@ package fr.ul.miage.exemple.arbre;
 
 import java.util.ArrayList;
 
+import fr.ul.miage.exemple.utils.Utils;
+
 public class Fonction implements Noeud{
 	
 	private int place;
@@ -26,7 +28,7 @@ public class Fonction implements Noeud{
 
 	@Override
 	public String toString() {
-		return "Fonction [place=" + place + ", noeuds=" + noeuds + "]";
+		return "\n\nFonction (" + Utils.symbols.get(place).getNom() + " : " + place + ")" + noeuds + "\n";
 	}
 
 	

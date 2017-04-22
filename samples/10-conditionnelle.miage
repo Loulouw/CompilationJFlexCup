@@ -6,6 +6,9 @@ int i = 3; int j;
 
 func nothing start{
 	si ( i < 2 ){
+		si ( j >= 5 ){
+			j = 5;
+		}
 		j=0;
 	}sinon{
 		j=1;

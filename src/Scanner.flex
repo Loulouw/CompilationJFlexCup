@@ -34,7 +34,9 @@ DIV=[\ \t]*\/[\ \t]*
 PO=[\ \t]*\([\ \t]*
 PF=[\ \t]*\)[\ \t]*
 INF=[\ \t]*\<[\ \t]*
+INFEGAL=[\ \t]*\<\=[\ \t]*
 SUP=[\ \t]*\>[\ \t]*
+SUPEGAL=[\ \t]*\>\=[\ \t]*
 DIFF=[\ \t]*\!\=[\ \t]*
 %%
 
@@ -51,6 +53,8 @@ DIFF=[\ \t]*\!\=[\ \t]*
 "tq"				{ return new Symbol(sym.TQ, yytext()); }
 "lire"				{ return new Symbol(sym.LIRE, yytext()); }
 "ecrire"			{ return new Symbol(sym.ECRIRE, yytext()); }
+{INFEGAL}			{ return new Symbol(sym.INFEGAL, yytext()); }
+{SUPEGAL}			{ return new Symbol(sym.SUPEGAL, yytext()); }
 {INF}				{ return new Symbol(sym.INF, yytext()); }
 {SUP}				{ return new Symbol(sym.SUP, yytext()); }
 {DIFF}				{ return new Symbol(sym.DIFF, yytext()); }

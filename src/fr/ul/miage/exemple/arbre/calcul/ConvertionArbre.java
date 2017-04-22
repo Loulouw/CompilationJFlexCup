@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Stack;
 import java.util.regex.Pattern;
 
+import fr.ul.miage.exemple.arbre.AppelFonction;
 import fr.ul.miage.exemple.arbre.Noeud;
 import fr.ul.miage.exemple.utils.Utils;
 
@@ -26,7 +27,17 @@ public class ConvertionArbre {
                 Object obj = part.get(i);
                 Noeud noeud = null;
                 if (obj instanceof String) {
-                    noeud = Utils.convertToNoeud((String) obj);
+                	if(((String)obj).startsWith("#F|")){
+                		String f[] = ((String) obj).split("\\|");
+                		noeud = new AppelFonction(Utils.getFonctionPlace(f[1]));
+                		if(f.length>2){
+                			for(int j = 2;j<f.length;j++){
+                				((AppelFonction)noeud).ajouterParametre(convertionEnArbre(convertToPostfix(f[j])));
+                			}
+                		}
+                	}else{
+                		noeud = Utils.convertToNoeud((String) obj);
+                	}
                     if(noeud != null){
                     	part.remove(i);
                     	part.add(i,noeud);
@@ -99,7 +110,6 @@ public class ConvertionArbre {
         String caracPrec = "";
         String carac;
         String temp = "";
-        System.out.println(infix);
         for (int i = 0; i < infix.length(); i++) {
             carac = Character.toString(infix.charAt(i));
             
@@ -107,20 +117,31 @@ public class ConvertionArbre {
                 temp += carac;
             } else {
                 if (carac.equals("(") && estUnOperand(caracPrec)) {
-          
+                	String nomFonc = temp;
+                	ArrayList<String> params = new ArrayList<>();
+                	String param = "|";
                     int pf = 1;
-                    temp += carac;
                     while (pf != 0) { 
                         i++;
                         String c = Character.toString(infix.charAt(i));
+                        param += c;
                         if (c.equals(")")) {
                             pf--;
+                            if(pf == 0) param = param.substring(0,param.length()-1);
                         } else if (c.equals("(")) {
                             pf++;
+                        } else if (c.equals(",")){
+                        	params.add(param);
+                        	param="|";
                         }
-                        temp += c;
+                        
+                        if(pf == 0 && !param.equalsIgnoreCase("|")){
+                        	params.add(param);
+                        }
                     }
-                    postfix.append(temp + " ");
+                    String paramFinal = "";
+                    for(String s : params) paramFinal += s;
+                    postfix.append("#F|" + nomFonc + paramFinal + " " );
                     temp = "";
                 } else {
                     if (!temp.equals("")) {

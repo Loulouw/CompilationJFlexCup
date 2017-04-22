@@ -14,7 +14,7 @@ public class Constante implements Noeud {
 
 	@Override
 	public String toString() {
-		return "Constante [valeur=" + valeur + "]";
+		return "Constante (" + valeur + ")";
 	}
 	
 	

@@ -11,7 +11,7 @@ public class Multiplication extends Calcul{
 
 	@Override
 	public String toString() {
-		return super.toString() + "Multiplication []";
+		return "{" + super.getPartieGauche() + " * " +super.getPartieDroite() + "}";
 	}
 
 }

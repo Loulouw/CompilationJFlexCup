@@ -17,7 +17,7 @@ public class Utils {
 	public static ArrayList<SymbolVar> symbolVarsLoc = new ArrayList<>();
 	
 	public static Noeud convertToNoeud(String val) {
-        Pattern patternVariable = Pattern.compile("^[a-zA-Z]+$");
+        Pattern patternVariable = Pattern.compile("^[a-zA-Z0-9]+$");
         Pattern patternConstante = Pattern.compile("^-?[0-9]+$");
         Noeud res = null;
 
@@ -43,7 +43,6 @@ public class Utils {
 		array.add(new SymbolFunc("","","func",0,0));
 		array.addAll(symbolParams);
 		array.addAll(symbolVarsLoc);
-
 		for(int i=array.size()-1;i>=0;i--){
 			Symbol s = array.get(i);
 			if(s.getNom().equals(name) && !s.getCat().equals("func")){
@@ -56,7 +55,17 @@ public class Utils {
 	
 	public static int getFonctionPlace(String name){
 		int res = -1;
-		
+		if(name.equalsIgnoreCase("rec")){
+			res = Utils.symbols.size();
+		}else{
+			for(int i = 0;i<Utils.symbols.size();i++){
+				Symbol s = Utils.symbols.get(i);
+				if(s.getCat().equals("func") && s.getNom().equals(name)){
+					res = i;
+					break;
+				}
+			}
+		}
 		return res;
 	}
 }

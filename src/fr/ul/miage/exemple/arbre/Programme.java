@@ -16,7 +16,7 @@ public class Programme {
 
 	@Override
 	public String toString() {
-		return "Programme [fonctions=" + fonctions + "]";
+		return "Programme : " + fonctions;
 	}
 
 	

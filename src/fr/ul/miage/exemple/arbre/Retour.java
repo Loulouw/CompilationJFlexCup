@@ -12,5 +12,11 @@ public class Retour implements Noeud {
 	public Noeud getValRetour() {
 		return valRetour;
 	}
+
+	@Override
+	public String toString() {
+		return "\nRetour : " + valRetour;
+	}
+	
 	
 }

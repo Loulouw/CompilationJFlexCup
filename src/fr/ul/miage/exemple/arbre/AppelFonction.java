@@ -2,21 +2,23 @@ package fr.ul.miage.exemple.arbre;
 
 import java.util.ArrayList;
 
+import fr.ul.miage.exemple.utils.Utils;
+
 public class AppelFonction implements Noeud{
 	
 	private int place;
-	private ArrayList<Noeud> parametre = new ArrayList<>();
+	private ArrayList<Noeud> parametres = new ArrayList<>();
 	
 	public AppelFonction(int place){
 		this.place = place;
 	}
 	
 	public void ajouterParametre(Noeud n){
-		parametre.add(n);
+		parametres.add(n);
 	}
 
-	public ArrayList<Noeud> getParametre() {
-		return parametre;
+	public ArrayList<Noeud> getParametres() {
+		return parametres;
 	}
 
 	public int getPlace() {
@@ -25,7 +27,7 @@ public class AppelFonction implements Noeud{
 
 	@Override
 	public String toString() {
-		return "AppelFonction [place=" + place + ", parametre=" + parametre + "]";
+		return "AppelFonction (" + Utils.symbols.get(place).getNom() + parametres + " : " + place + ")";
 	}
 
 	

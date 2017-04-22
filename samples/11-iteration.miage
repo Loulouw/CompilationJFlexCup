@@ -8,6 +8,13 @@ func nothing main{
 	i = 0; j = 0;
 	tq(i<3){
 		j=j+i;
+		si ( i < 3 ){
+			ecrire(i);
+		}sinon{
+			tq(i<3){
+				j = lire();
+			}
+		}
 	}
  }
 

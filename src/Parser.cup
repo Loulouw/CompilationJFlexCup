@@ -14,6 +14,7 @@ import fr.ul.miage.exemple.arbre.*;
 import fr.ul.miage.exemple.utils.*;
 import fr.ul.miage.exemple.arbre.calcul.*;
 import java.util.regex.*;
+import fr.ul.miage.exemple.arbre.condition.*;
 
 /* Fonctions */
 action code 
@@ -21,12 +22,13 @@ action code
 	private Programme programme = new Programme();
  
 	private ArrayList<Noeud> noeudsFonction = new ArrayList<>();
+	private ArrayList<Noeud> noeudsCond = new ArrayList<>();
 	
 	private int rangVarGlobal = 0;
 
 	private Pattern patternVariable = Pattern.compile("^[a-zA-Z]+$");
 	private Pattern patternConstante = Pattern.compile("^-?[0-9]+$");
-
+	
  	public void ajouterVar(String str,boolean glob){
 		String values[] = str.split(",");
 		
@@ -93,23 +95,72 @@ action code
 		}else{
 			noeud = ConvertionArbre.convertirCalcul(values[1].trim());
 		}
+		
 		Affectation affectation = new Affectation(variable,noeud);
-		noeudsFonction.add(affectation);
+		ajouterNoeud(affectation);
 	}
 	
 	public void ajouterRetour(String str){
 		Retour retour = new Retour(ConvertionArbre.convertirCalcul(str.trim()));
-		noeudsFonction.add(retour);
+		ajouterNoeud(retour);
 	}
 
 	public void ajouterEcrire(String str){
 		Ecrire ecrire = new Ecrire(ConvertionArbre.convertirCalcul(str.trim()));
-		noeudsFonction.add(ecrire);
+		ajouterNoeud(ecrire);
+	}
+
+	public void ajouterSi(String str){
+		String condSplit[] = str.split("[ \t]+");
+		Noeud l = ConvertionArbre.convertirCalcul(condSplit[0]);
+		Noeud r = ConvertionArbre.convertirCalcul(condSplit[2]);
+		Condition condition = new Condition(l,r,condSplit[1]);
+		Si si = new Si(condition);
+
+		ajouterNoeud(si);
+		noeudsCond.add(si);
+	}
+	
+	public void ajouterTantQue(String str){
+		String condSplit[] = str.split("[ \t]+");
+		Noeud l = ConvertionArbre.convertirCalcul(condSplit[0]);
+		Noeud r = ConvertionArbre.convertirCalcul(condSplit[2]);
+		Condition condition = new Condition(l,r,condSplit[1]);
+		TantQue tq = new TantQue(condition);
+
+		ajouterNoeud(tq);
+		noeudsCond.add(tq);
+	}
+	
+	public void finCond(){
+		noeudsCond.remove(noeudsCond.size()-1);
+	}
+	
+	public void setSinon(){
+		((Si)noeudsCond.get(noeudsCond.size()-1)).setEtat(false);
+	}
+	
+	public void ajouterNoeud(Noeud n){
+		if(noeudsCond.size() > 0){
+			Noeud nd = noeudsCond.get(noeudsCond.size()-1);
+			if(nd instanceof Si){
+				if(((Si)nd).getEtat() ){
+					((Si)nd).getValidee().add(n);
+				}else{
+					((Si)nd).getRefusee().add(n);
+				}
+			}else{
+				((TantQue)nd).getActions().add(n);
+			}
+			
+		}else{
+			noeudsFonction.add(n);
+		}	
 	}
 
 	public void fin(){
-		for(Symbol s : Utils.symbols) System.out.println(s);
-		System.out.println(programme);
+		for(int i=0;i<Utils.symbols.size();i++) System.out.println(i + " - " + Utils.symbols.get(i)); 
+		System.out.println("\n" + programme);
 	}
 	
 :}
@@ -119,18 +170,19 @@ terminal CRO_OUVR, CRO_FERM, RETOUR, ESPACE, PV, VIRG;
 terminal COMMENTAIRE;
 terminal FUNC, NOM, NOMBRE, RETURN;
 terminal INT, NOTHING;
-terminal PLUS,MOINS,FOIS,DIV,PO,PF,EGAL,INF,SUP,DIFF;
+terminal PLUS,MOINS,FOIS,DIV,PO,PF,EGAL,INF,INFEGAL,SUP,SUPEGAL,DIFF;
 terminal SI,SINON,TQ;
 terminal LIRE,ECRIRE;
 
 
-non terminal l, ligne, fonction, actions, content_function, content_function_list;
+non terminal l, ligne, fonction, actions;
+non terminal content_function, content_function_list;
 non terminal type, declaration_var,declaration_var_mul_nom, declaration_var_mul, declaration_var_mul_value, declaration_value;
 non terminal affectation, calcul;
 non terminal return, appel_fonction, param_appel_fonction, param_appel_fonction_rec;
 non terminal param_fonction, param_fonction_rec;
 non terminal c2,c3,c4,c5;
-non terminal si,sinon,tq, condition, s2,s3,s4,s5;
+non terminal si,ouvsi,sinon,ouvsinon,tq,ouvtq, condition, s2,s3,s4,s5,s6,s7;
 non terminal ecrire;
 
 //Precedences added by Eclipse plugin
@@ -167,8 +219,8 @@ param_fonction ::= ESPACE type:a ESPACE NOM:b VIRG {: ajouterParam(a.toString() 
 content_function	::= content_function content_function_list | /*vide*/ ;
 
 content_function_list ::= RETOUR | COMMENTAIRE 
-						| si 
-						| tq 
+						| si {: finCond(); :}
+						| tq {: finCond(); :}
 						| ecrire:a {: ajouterEcrire(a.toString()); :}
 						| return:a {: ajouterRetour(a.toString()); :}
 						| appel_fonction PV 
@@ -190,21 +242,38 @@ return 			::= RETURN ESPACE calcul:a PV {: RESULT=a.toString(); :};
 /***********************************************/
 /***************CONDITION/BOUCLE****************/
 /***********************************************/
-si ::= SI PO condition PF CRO_OUVR content_function CRO_FERM sinon;
+si ::= SI PO ouvsi PF CRO_OUVR content_function CRO_FERM sinon;
 
-sinon ::= SINON CRO_OUVR content_function CRO_FERM | /* vide */;
+ouvsi ::= condition:b {: ajouterSi(b.toString()); :};
 
-tq ::= TQ PO condition PF CRO_OUVR content_function CRO_FERM;
+sinon ::= SINON ouvsinon CRO_OUVR content_function CRO_FERM
+		| /* vide */;
 
-condition ::= condition INF s2 | s2;
+ouvsinon ::= {: setSinon(); :};
 
-s2 ::= s2 SUP s3 | s3;
+tq ::= TQ PO ouvtq PF CRO_OUVR content_function CRO_FERM;
 
-s3 ::= s3 DIFF s4 | s4;
+ouvtq ::= condition:a {: ajouterTantQue(a.toString()); :};
 
-s4 ::= s4 EGAL s5 | s5;
+condition ::= condition:a INFEGAL s2:b {: RESULT=a.toString() + " <= " + b.toString(); :} 
+	| s2:a {: RESULT=a.toString(); :};
 
-s5 ::= calcul;
+s2 ::= s2:a SUPEGAL s3:b {: RESULT=a.toString() + " >= " + b.toString(); :}
+	| s3:a {: RESULT=a.toString(); :};
+
+s3 ::= s3:a INF s4:b {: RESULT=a.toString() + " < " + b.toString(); :}
+	| s4:a {: RESULT=a.toString(); :};
+
+s4 ::= s4:a SUP s5:b {: RESULT=a.toString() + " > " + b.toString(); :}
+	| s5:a {: RESULT=a.toString(); :};
+
+s5 ::= s5:a DIFF s6:b {: RESULT=a.toString() + " != " + b.toString(); :}
+	| s6:a {: RESULT=a.toString(); :};
+
+s6 ::= s6:a EGAL s7:b {: RESULT=a.toString() + " = " + b.toString(); :} 
+	| s7:a {: RESULT=a.toString(); :};
+
+s7 ::= calcul:a {: RESULT=a.toString(); :};
 
 /***********************************************/
 /***************FIN CONDITION/BOUCLE************/

@@ -11,7 +11,7 @@ public class Soustraction extends Calcul{
 
 	@Override
 	public String toString() {
-		return super.toString() + "Soustraction []";
+		return "{" + super.getPartieGauche() + " - " +super.getPartieDroite() + "}";
 	}
 
 }

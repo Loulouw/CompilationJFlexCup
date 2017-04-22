@@ -4,12 +4,6 @@
 
 int i, j,k;
 
-func int f{
-	i = 1;
-	j = i + g();
-	return j;
-}
-
 func int g{
 	int j, l2, l3, l4;
 	
@@ -17,6 +11,12 @@ func int g{
 	j = 10 + l2 + l3 + l4;
 
 	return i+j;
+}
+
+func int f{
+	i = 1;
+	j = i + g();
+	return j;
 }
 
 func nothing start{

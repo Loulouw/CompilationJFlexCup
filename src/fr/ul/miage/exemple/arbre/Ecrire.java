@@ -12,5 +12,11 @@ public class Ecrire implements Noeud{
 	public Noeud getVal() {
 		return val;
 	}
+
+	@Override
+	public String toString() {
+		return "\nEcrire [val=" + val + "]";
+	}
+	
 	
 }

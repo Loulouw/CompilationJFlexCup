@@ -11,7 +11,7 @@ public class Division extends Calcul{
 
 	@Override
 	public String toString() {
-		return super.toString() + "Division []";
+		return "{" + super.getPartieGauche() + " / " +super.getPartieDroite() + "}";
 	}
 
 	

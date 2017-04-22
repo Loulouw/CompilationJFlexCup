@@ -1,5 +1,7 @@
 package fr.ul.miage.exemple.arbre;
 
+import fr.ul.miage.exemple.utils.Utils;
+
 public class Variable implements Noeud {
 
 	private int place;
@@ -14,7 +16,7 @@ public class Variable implements Noeud {
 
 	@Override
 	public String toString() {
-		return "Variable [place=" + place + "]";
+		return "Variable (" + Utils.symbols.get(place).getNom() + " : " + place + ")";
 	}
 	
 	
