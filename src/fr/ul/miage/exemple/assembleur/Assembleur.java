@@ -3,6 +3,7 @@ package fr.ul.miage.exemple.assembleur;
 import java.util.*;
 
 import fr.ul.miage.exemple.arbre.Affectation;
+import fr.ul.miage.exemple.arbre.Fonction;
 import fr.ul.miage.exemple.arbre.Noeud;
 import fr.ul.miage.exemple.arbre.Programme;
 import fr.ul.miage.exemple.symbol.Symbol;
@@ -13,7 +14,7 @@ import fr.ul.miage.exemple.symbol.SymbolVarGlob;
 public class Assembleur {
 
 	private Programme programme;
-	private ArrayList<Noeud> fonctions;
+	private ArrayList<Fonction> fonctions;
 	private int posFonc = 0;
 	private ArrayList<Symbol> symbols;
 	private String fichierAssembleur;
@@ -47,9 +48,9 @@ public class Assembleur {
 		String res = nom + ": PUSH(LP)\n" +
 		"PUSH(BP)\n" + 
 		"MOVE(SP,BP)\n";
+	
 		
-		
-		for (Noeud noeud : fonctions.get(posFonc). ) {
+		for (Noeud noeud : fonctions.get(posFonc).getNoeuds() ) {
 			res += genererInstructions(noeud);
 		}
 		
@@ -63,12 +64,13 @@ public class Assembleur {
 	private String genererInstructions(Noeud noeud) {
 		String res = "";
 		if(noeud instanceof Affectation){
-			res += genererAffectation(noeud.get());
+			Affectation a = (Affectation)noeud;
+			res += genererAffectation(a.getPartieGauche(),a.getPartieDroite());
 		}
 		return res;
 	}
 
-	private String genererAffectation(Noeud noeud) {
+	private String genererAffectation(Noeud noeudGauche,Noeud noeudDroit) {
 		// TODO Auto-generated method stub
 		return null;
 	}
