@@ -71,8 +71,11 @@ public class Assembleur {
 	}
 
 	private String genererAffectation(Noeud noeudGauche,Noeud noeudDroit) {
-		// TODO Auto-generated method stub
-		return null;
+		System.out.println(noeudGauche.toString());
+		/*String res = "POP(R0)\n" +
+		"STORE(R0," + noeudGauche."\n" + 
+		"";
+		return res;*/
 	}
 	
 	
