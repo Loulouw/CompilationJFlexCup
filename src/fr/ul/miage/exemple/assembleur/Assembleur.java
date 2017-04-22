@@ -3,6 +3,8 @@ package fr.ul.miage.exemple.assembleur;
 import java.util.*;
 import fr.ul.miage.exemple.arbre.Noeud;
 import fr.ul.miage.exemple.symbol.Symbol;
+import fr.ul.miage.exemple.symbol.SymbolFunc;
+import fr.ul.miage.exemple.symbol.SymbolVarGlob;
 
 
 public class Assembleur {
@@ -14,11 +16,22 @@ public class Assembleur {
 	public Assembleur(ArrayList<Noeud> noeudsFonction, ArrayList<Symbol> symbols){
 		this.noeudsFonction = noeudsFonction;
 		this.symbols = symbols;
-		fichierAssembleur = ".include beta.uasm\n";
+		fichierAssembleur = ".include beta.uasm\n" +
+		"CMOVE(pile, SP)\n" +
+		"CALL(main)\n" +
+		"HALT()\n\n";
 	}
 	
 	public void generer(){
+		System.out.println("ASSEMBLEUR");
 		
+		for (Symbol symbol : symbols) {
+			if(symbol instanceof SymbolVarGlob){
+				fichierAssembleur += symbol.getNom() + ": LONG(0)\n"; 
+			}
+		}
+		
+		System.out.println(fichierAssembleur);
 	}
 	
 	
