@@ -16,6 +16,7 @@ public class Assembleur {
 	private int posFonc = 0;
 	private ArrayList<Symbol> symbols;
 	private String fichierAssembleur;
+	private int maxCalc=0;
 	
 	public Assembleur(Programme programme, ArrayList<Symbol> symbols){
 		this.programme = programme;
@@ -23,6 +24,7 @@ public class Assembleur {
 		this.symbols = symbols;
 		this.symbolsVarGlobs = new ArrayList<String>();
 		fichierAssembleur = ".include beta.uasm\n" +
+		//".options MUL DIV\n"+
 		"BR(start)\n\n";
 	}
 	
@@ -47,12 +49,12 @@ public class Assembleur {
 
 	private String genererFonction(String nom) {
 		String res = nom + ":\n";
-		if(nom.equals("start")){
+		/*if(nom.equals("start")){
 			for (String str : symbolsVarGlobs) {
 				res += str;
 			}
 		}
-		
+		*/
 		/*res += "PUSH(LP)\n" +
 		"PUSH(BP)\n" + 
 		"MOVE(SP,BP)\n"; // + 
@@ -80,14 +82,18 @@ public class Assembleur {
 
 	private String genererAffectation(Noeud noeudGauche,Noeud noeudDroit) {
 		Variable partieGauche = (Variable)noeudGauche;	
-		String res = getCalcul(noeudDroit, "R"+partieGauche.getPlace(), symbols.get(partieGauche.getPlace()).getNom());// + 
+		String res = getCalcul(noeudDroit, "R"+partieGauche.getPlace(), symbols.get(partieGauche.getPlace()).getNom(), 0);// + 
 		//"POP(R0)\n" + 
 		//"ST(R0," + symbols.get(partieGauche.getPlace()).getNom() +")\n";	
 		
 		return res;
 	}
 	
-	private String getCalcul(Noeud n, String R, String var){
+	private String getCalcul(Noeud n, String R, String var, int nbCalc){
+		// Comme les operations se font a l'envers. Il faut que quand nbCal est au max ne pas afficher LD
+		if(nbCalc > maxCalc){
+			maxCalc = nbCalc-1;
+		}
 		String res = "";
 		if(n instanceof Variable){
 			Variable v = (Variable)n;	
@@ -102,31 +108,42 @@ public class Assembleur {
 			
 		}else if(n instanceof Calcul){
 			Noeud g = ((Calcul)n).getPartieGauche();
-			String partieGauche = getCalcul(g, "R0", var);
+			String partieGauche = getCalcul(g, "R0", var, nbCalc+1);
 			
 			Noeud d = ((Calcul)n).getPartieDroite();
-			String partieDroite = getCalcul(d, "R1", var);
-			
+			String partieDroite = getCalcul(d, "R1", var, nbCalc+1);
+		
 			if(n instanceof Addition){
 				res += partieGauche +"\n"+
-				partieDroite +"\n"+
-				"LD(x,R0) \n"+
-				"ADD(R0,R1,R2)\n" +
+				partieDroite +"\n";
+				if(nbCalc != maxCalc)
+					res += "LD(x,R0) \n";
+				res += "ADD(R0,R1,R2)\n" +
 				"ST(R2," + var + ")\n";
 			}else if(n instanceof Soustraction){
 				res += partieGauche +"\n"+
-				partieDroite +"\n"+
-				"LD(x,R0) \n"+
-				"ADD(R0,R1,R2)\n" +
+				partieDroite +"\n";
+				if(nbCalc != maxCalc)
+					res += "LD(x,R0) \n";
+				res += "SUB(R0,R1,R2)\n" +
 				"ST(R2," + var + ")\n";
 			}else if(n instanceof Multiplication){
-				
+				res += partieGauche +"\n"+
+				partieDroite +"\n";
+				if(nbCalc != maxCalc)
+					res += "LD(x,R0) \n";
+				res +="MUL(R0,R1,R2)\n" +
+				"ST(R2," + var + ")\n";
 			}else if(n instanceof Division){
-				
+				res += partieGauche +"\n"+
+				partieDroite +"\n";
+				if(nbCalc != maxCalc)
+					res += "LD(x,R0) \n";
+				res +="DIV(R0,R1,R2)\n" +
+				"ST(R2," + var + ")\n";
 			}
 			
 		}
-		
 		return res;
 	}
 	
